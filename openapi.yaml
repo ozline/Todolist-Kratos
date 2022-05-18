@@ -1,0 +1,330 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: Todolist API
+    description: The greeting service definition.
+    version: 0.0.1
+paths:
+    /api/todo:
+        post:
+            tags:
+                - Todolist
+            description: Add a todothings
+            operationId: Todolist_AddTodo
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AddTodoRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AddTodoReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/todo/all:
+        get:
+            tags:
+                - Todolist
+            description: Show all todothings
+            operationId: Todolist_ShowAllTodo
+            parameters:
+                - name: status
+                  in: query
+                  schema:
+                    type: string
+                - name: page
+                  in: query
+                  schema:
+                    type: string
+                - name: num
+                  in: query
+                  schema:
+                    type: string
+                - name: token
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ShowAllTodoReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/todo/key:
+        get:
+            tags:
+                - Todolist
+            description: Show KeyMatched todothings
+            operationId: Todolist_ShowKeyTodo
+            parameters:
+                - name: keywords
+                  in: query
+                  schema:
+                    type: string
+                - name: page
+                  in: query
+                  schema:
+                    type: string
+                - name: num
+                  in: query
+                  schema:
+                    type: string
+                - name: token
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ShowKeyTodoReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/todo/{id}:
+        put:
+            tags:
+                - Todolist
+            description: Modify a todothings
+            operationId: Todolist_ModifyTodo
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ModifyTodoRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ModifyTodoReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        delete:
+            tags:
+                - Todolist
+            description: Delete a todothings
+            operationId: Todolist_DeleteTodo
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DeleteTodoReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/user/login:
+        post:
+            tags:
+                - Todolist
+            description: Login a user
+            operationId: Todolist_LoginUser
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/LoginUserRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/LoginUserReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/user/register:
+        post:
+            tags:
+                - Todolist
+            description: Register a user
+            operationId: Todolist_RegisterUser
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RegisterUserRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/RegisterUserReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+components:
+    schemas:
+        AddTodoReply:
+            type: object
+            properties:
+                code:
+                    type: string
+                msg:
+                    type: string
+        AddTodoRequest:
+            type: object
+            properties:
+                title:
+                    type: string
+                message:
+                    type: string
+                token:
+                    type: string
+                endtime:
+                    type: string
+        DeleteTodoReply:
+            type: object
+            properties:
+                code:
+                    type: string
+                msg:
+                    type: string
+        GoogleProtobufAny:
+            type: object
+            properties:
+                '@type':
+                    type: string
+                    description: The type of the serialized message.
+            additionalProperties: true
+            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
+        LoginUserReply:
+            type: object
+            properties:
+                unifiedreply:
+                    $ref: '#/components/schemas/UnifiedReply'
+        LoginUserRequest:
+            type: object
+            properties:
+                username:
+                    type: string
+                password:
+                    type: string
+                verifycode:
+                    type: string
+        ModifyTodoReply:
+            type: object
+            properties:
+                code:
+                    type: string
+                msg:
+                    type: string
+        ModifyTodoRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+        RegisterUserReply:
+            type: object
+            properties:
+                code:
+                    type: string
+                msg:
+                    type: string
+        RegisterUserRequest:
+            type: object
+            properties:
+                username:
+                    type: string
+                password:
+                    type: string
+        ShowAllTodoReply:
+            type: object
+            properties:
+                code:
+                    type: string
+                msg:
+                    type: string
+                data:
+                    type: string
+        ShowKeyTodoReply:
+            type: object
+            properties:
+                code:
+                    type: string
+                msg:
+                    type: string
+                data:
+                    type: string
+        Status:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    description: The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
+                    format: int32
+                message:
+                    type: string
+                    description: A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
+                details:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GoogleProtobufAny'
+                    description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
+            description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
+        UnifiedReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int64
+                msg:
+                    type: string
+tags:
+    - name: Todolist

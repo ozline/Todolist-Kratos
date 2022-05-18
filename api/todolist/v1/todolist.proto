@@ -1,0 +1,148 @@
+syntax = "proto3";
+
+package todolist.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "todolist/api/todolist/v1;v1";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.todolist.v1";
+option java_outer_classname = "TodoListProtoV1";
+
+// The greeting service definition.
+service Todolist {
+
+  // Register a user
+  rpc RegisterUser (RegisterUserRequest) returns (RegisterUserReply) {
+    option (google.api.http) = {
+      post: "/api/user/register",
+      body: "*",
+    };
+  }
+
+  // Login a user
+  rpc LoginUser (LoginUserRequest) returns (LoginUserReply) {
+    option (google.api.http) = {
+      post: "/api/user/login",
+      body: "*",
+    };
+  }
+
+  // Add a todothings
+  rpc AddTodo (AddTodoRequest) returns (AddTodoReply) {
+    option (google.api.http) = {
+      post: "/api/todo",
+      body: "*",
+    };
+  }
+
+  // Show all todothings
+  rpc ShowAllTodo (ShowAllTodoRequest) returns (ShowAllTodoReply) {
+    option (google.api.http) = {
+      get: "/api/todo/all",
+    };
+  }
+
+  // Show KeyMatched todothings
+  rpc ShowKeyTodo (ShowKeyTodoRequest) returns (ShowKeyTodoReply) {
+    option (google.api.http) = {
+      get: "/api/todo/key",
+    };
+  }
+
+  // Delete a todothings
+  rpc DeleteTodo (DeleteTodoRequest) returns (DeleteTodoReply) {
+    option (google.api.http) = {
+      delete: "/api/todo/{id}",
+    };
+  }
+
+  // Modify a todothings
+  rpc ModifyTodo (ModifyTodoRequest) returns (ModifyTodoReply) {
+    option (google.api.http) = {
+      put: "/api/todo/{id}",
+      body: "*",
+    };
+  }
+}
+message ShowKeyTodoRequest{
+  string keywords = 1;
+  string page = 2;
+  string num = 3;
+  string token = 4;
+}
+
+message ShowAllTodoRequest{
+  string status = 1;
+  string page = 2;
+  string num = 3;
+  string token = 4;
+}
+
+message DeleteTodoRequest{
+  string id = 1;
+}
+
+message ModifyTodoRequest{
+  string id = 1;
+}
+
+message AddTodoRequest{
+  string title = 1;
+  string message = 2;
+  string token = 3;
+  string endtime = 4;
+}
+
+message LoginUserRequest{
+  string username = 1;
+  string password = 2;
+  string verifycode = 3;
+}
+
+message RegisterUserRequest{
+  string username = 1;
+  string password = 2;
+}
+
+message RegisterUserReply{
+  string code = 1;
+  string msg = 2;
+}
+
+message UnifiedReply{
+  int64 code = 1;
+  string msg = 2;
+}
+
+
+message LoginUserReply{
+  UnifiedReply unifiedreply = 1; 
+}
+
+message AddTodoReply{
+  string code = 1;
+  string msg = 2;
+}
+
+message DeleteTodoReply{
+  string code = 1;
+  string msg = 2;
+}
+
+message ModifyTodoReply{
+  string code = 1;
+  string msg = 2;
+}
+
+message ShowAllTodoReply{
+  string code = 1;
+  string msg = 2;
+  string data = 3;
+}
+
+message ShowKeyTodoReply{
+  string code = 1;
+  string msg = 2;
+  string data = 3;
+}
