@@ -13,7 +13,7 @@ type userRepo struct {
 }
 
 // NewTodolistRepo .
-func NewUserRepo(data *Data, logger log.Logger) biz.TodolistRepo {
+func NewUserRepo(data *Data, logger log.Logger) biz.UserRepo {
 	return &userRepo{
 		data: data,
 		log:  log.NewHelper(logger),
@@ -21,5 +21,6 @@ func NewUserRepo(data *Data, logger log.Logger) biz.TodolistRepo {
 }
 
 func (r *userRepo) LoginUser(ctx context.Context, g *biz.User) error {
+	// r.data.db.Create()
 	return nil
 }

@@ -25,9 +25,9 @@ func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 	if err != nil {
 		return nil, nil, err
 	}
-	todolistRepo := data.NewTodolistRepo(dataData, logger)
-	todolistUsecase := biz.NewTodolistUsecase(todolistRepo, logger)
-	todolistService := service.NewTodolistService(todolistUsecase)
+	userRepo := data.NewUserRepo(dataData, logger)
+	userUsecase := biz.NewUserUsecase(userRepo, logger)
+	todolistService := service.NewTodolistService(userUsecase, logger)
 	httpServer := server.NewHTTPServer(confServer, todolistService, logger)
 	grpcServer := server.NewGRPCServer(confServer, todolistService, logger)
 	app := newApp(logger, httpServer, grpcServer)

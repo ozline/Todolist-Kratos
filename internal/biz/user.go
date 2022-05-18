@@ -30,6 +30,9 @@ func NewUserUsecase(repo UserRepo, logger log.Logger) *UserUsecase {
 	return &UserUsecase{ur: repo, log: log.NewHelper(logger)}
 }
 
-func (uc *UserUsecase) LoginUser(ctx context.Context) error {
+func (uc *UserUsecase) LoginUser(ctx context.Context, u *User) error {
+	if err := uc.ur.LoginUser(ctx, u); err != nil {
+
+	}
 	return nil
 }
