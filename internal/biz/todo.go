@@ -23,9 +23,3 @@ func NewTodolistUsecase(repo TodolistRepo, logger log.Logger) *TodolistUsecase {
 func (uc *TodolistUsecase) AddTodo(ctx context.Context) error {
 	return nil
 }
-
-// // CreateTodolist creates a Todolist, and returns the new Todolist.
-// func (uc *TodolistUsecase) CreateTodolist(ctx context.Context, g *Todolist) (*Todolist, error) {
-// 	uc.log.WithContext(ctx).Infof("CreateTodolist: %v", g.Hello)
-// 	return uc.tl.Save(ctx, g)
-// }

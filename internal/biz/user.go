@@ -1,6 +1,7 @@
 package biz
 
 import (
+	"context"
 	v1 "todolist/api/todolist/v1"
 
 	"github.com/go-kratos/kratos/v2/errors"
@@ -12,18 +13,23 @@ var (
 	ErrUserNotFound = errors.NotFound(v1.ErrorReason_USER_NOT_FOUND.String(), "user not found")
 )
 
+type User struct {
+	Username string
+}
+
 type UserRepo interface {
+	LoginUser(ctx context.Context, user *User) error
 }
 
 type UserUsecase struct {
-	tl  TodolistRepo
+	ur  UserRepo
 	log *log.Helper
 }
 
-func NewUserUsecase(repo TodolistRepo, logger log.Logger) *TodolistUsecase {
-	return &TodolistUsecase{tl: repo, log: log.NewHelper(logger)}
+func NewUserUsecase(repo UserRepo, logger log.Logger) *UserUsecase {
+	return &UserUsecase{ur: repo, log: log.NewHelper(logger)}
 }
 
-// func (uc *TodolistUsecase) AddTodo(ctx context.Context) error {
-// 	return nil
-// }
+func (uc *UserUsecase) LoginUser(ctx context.Context) error {
+	return nil
+}
