@@ -1,0 +1,18 @@
+server:
+  http:
+    addr:
+    timeout:
+  grpc:
+    addr:
+    timeout:
+data:
+  database:
+    username:
+    password:
+    address:
+    port:
+    dbname:
+  redis:
+    addr:
+    read_timeout:
+    write_timeout:
