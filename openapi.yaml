@@ -261,8 +261,6 @@ components:
                     type: string
                 password:
                     type: string
-                verifycode:
-                    type: string
         ModifyTodoReply:
             type: object
             properties:
@@ -279,9 +277,12 @@ components:
             type: object
             properties:
                 code:
-                    type: string
+                    type: integer
+                    format: int64
                 msg:
                     type: string
+                data:
+                    $ref: '#/components/schemas/User'
         RegisterUserRequest:
             type: object
             properties:
@@ -289,6 +290,11 @@ components:
                     type: string
                 password:
                     type: string
+                email:
+                    type: string
+                phone:
+                    type: integer
+                    format: int64
         ShowAllTodoReply:
             type: object
             properties:
@@ -334,7 +340,7 @@ components:
                     type: string
                 nickname:
                     type: string
-                createat:
+                createdAt:
                     type: integer
                     format: int64
                 phone:

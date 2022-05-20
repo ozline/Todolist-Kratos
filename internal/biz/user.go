@@ -14,17 +14,18 @@ var (
 )
 
 type User struct {
-	Username     string
-	Email        string
-	Phone        int64
-	Createat     int64
-	PasswordHash string
-	Nickname     string
-	Token        string
+	Username  string
+	Email     string
+	Phone     int64
+	Create_at int64
+	Password  string
+	Nickname  string
+	Token     string
 }
 
 type UserRepo interface {
-	LoginUser(ctx context.Context, req *v1.LoginUserRequest) (*User, error)
+	GetUserByUsername(ctx context.Context, username string) (*User, error)
+	CreateUser(ctx context.Context, req *v1.RegisterUserRequest) error
 	// GetUserByEmail(ctx context.Context, email string) (*User, error)
 }
 
@@ -38,9 +39,35 @@ func NewUserUsecase(repo UserRepo, logger log.Logger) *UserUsecase {
 }
 
 func (uc *UserUsecase) LoginUser(ctx context.Context, u *v1.LoginUserRequest) (*User, error) {
-	data, err := uc.ur.LoginUser(ctx, u)
-	if err != nil {
-		panic(data)
+	if len(u.Username) == 0 || len(u.Password) == 0 {
+		return nil, errors.New(422, "Params", "Missing Params Data")
 	}
+	data, err := uc.ur.GetUserByUsername(ctx, u.Username)
+	if err != nil {
+		return nil, err
+	}
+	if GenerateTokenSHA256(u.Password) != data.Password {
+		return nil, errors.New(422, "Params", "username of password invalid")
+	}
+
+	return data, err
+}
+
+func (uc *UserUsecase) RegisterUser(ctx context.Context, u *v1.RegisterUserRequest) (*User, error) {
+	if len(u.Username) == 0 || len(u.Password) == 0 || u.Phone == 0 || len(u.Email) == 0 {
+		return nil, errors.New(422, "Params", "Missing Params Data")
+	}
+	err := uc.ur.CreateUser(ctx, u)
+	if err != nil {
+		return nil, err
+	}
+
+	//注册成功后调用一次获取用户信息的API，回调用户信息
+	data, err := uc.ur.GetUserByUsername(ctx, u.Username)
+
+	if err != nil {
+		return nil, err
+	}
+
 	return data, nil
 }
