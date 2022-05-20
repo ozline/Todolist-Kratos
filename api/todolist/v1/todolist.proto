@@ -65,6 +65,8 @@ service Todolist {
     };
   }
 }
+//Request Messages
+
 message ShowKeyTodoRequest{
   string keywords = 1;
   string page = 2;
@@ -105,19 +107,32 @@ message RegisterUserRequest{
   string password = 2;
 }
 
-message RegisterUserReply{
-  string code = 1;
-  string msg = 2;
-}
+//Reply Messages
 
 message UnifiedReply{
   int64 code = 1;
   string msg = 2;
 }
 
+message User{
+  string username = 1;
+  string status = 2;
+  string email = 3;
+  string nickname = 4;
+  int64 createat = 5;
+  int64 phone = 6;
+}
+
+message RegisterUserReply{
+  string code = 1;
+  string msg = 2;
+}
+
 
 message LoginUserReply{
-  UnifiedReply unifiedreply = 1; 
+  int64 code = 1;
+  string msg = 2;
+  User data = 3;
 }
 
 message AddTodoReply{

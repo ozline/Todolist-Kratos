@@ -1,4 +1,6 @@
-# Kratos Project Template
+# TodoList - Kratos
+
+A TodoList Back-end Using Kratos Framework
 
 ## Install Kratos
 ```

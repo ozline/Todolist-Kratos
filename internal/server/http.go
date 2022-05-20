@@ -15,6 +15,9 @@ func NewHTTPServer(c *conf.Server, greeter *service.TodolistService, logger log.
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
+			// jwt.Server(func(token *jwtv4.Token) (interface{}, error) {
+			// 	return []byte(testKey), nil
+			// }),
 		),
 	}
 	if c.Http.Network != "" {

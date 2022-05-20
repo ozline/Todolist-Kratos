@@ -2,6 +2,7 @@ package data
 
 import (
 	"context"
+	v1 "todolist/api/todolist/v1"
 	"todolist/internal/biz"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -20,7 +21,12 @@ func NewUserRepo(data *Data, logger log.Logger) biz.UserRepo {
 	}
 }
 
-func (r *userRepo) LoginUser(ctx context.Context, g *biz.User) error {
+func (r *userRepo) LoginUser(ctx context.Context, g *v1.LoginUserRequest) (*biz.User, error) {
 	// r.data.db.Create()
-	return nil
+	return &biz.User{
+		Username: "ozline",
+		Phone:    15959014518,
+		Createat: 13107655114,
+		Email:    "ozlinex@outlook.com",
+	}, nil
 }

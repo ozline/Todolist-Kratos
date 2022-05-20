@@ -14,11 +14,18 @@ var (
 )
 
 type User struct {
-	Username string
+	Username     string
+	Email        string
+	Phone        int64
+	Createat     int64
+	PasswordHash string
+	Nickname     string
+	Token        string
 }
 
 type UserRepo interface {
-	LoginUser(ctx context.Context, user *User) error
+	LoginUser(ctx context.Context, req *v1.LoginUserRequest) (*User, error)
+	// GetUserByEmail(ctx context.Context, email string) (*User, error)
 }
 
 type UserUsecase struct {
@@ -30,9 +37,10 @@ func NewUserUsecase(repo UserRepo, logger log.Logger) *UserUsecase {
 	return &UserUsecase{ur: repo, log: log.NewHelper(logger)}
 }
 
-func (uc *UserUsecase) LoginUser(ctx context.Context, u *User) error {
-	if err := uc.ur.LoginUser(ctx, u); err != nil {
-
+func (uc *UserUsecase) LoginUser(ctx context.Context, u *v1.LoginUserRequest) (*User, error) {
+	data, err := uc.ur.LoginUser(ctx, u)
+	if err != nil {
+		panic(data)
 	}
-	return nil
+	return data, nil
 }

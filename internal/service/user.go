@@ -7,12 +7,25 @@ import (
 
 //用户登录
 func (s *TodolistService) LoginUser(ctx context.Context, req *v1.LoginUserRequest) (reply *v1.LoginUserReply, err error) {
-	return &v1.LoginUserReply{
-		Unifiedreply: &v1.UnifiedReply{
+	user, err := s.uc.LoginUser(ctx, req)
+
+	if err != nil && user == nil {
+		return &v1.LoginUserReply{
+			Code: 400,
+			Msg:  err.Error(),
+		}, err
+	} else {
+		return &v1.LoginUserReply{
 			Code: 200,
 			Msg:  "ok",
-		},
-	}, nil
+			Data: &v1.User{
+				Username: user.Username,
+				Email:    user.Email,
+				Createat: user.Createat,
+				Phone:    user.Phone,
+			},
+		}, nil
+	}
 }
 
 //用户注册
