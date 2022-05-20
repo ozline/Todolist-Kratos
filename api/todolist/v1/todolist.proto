@@ -9,27 +9,11 @@ option java_multiple_files = true;
 option java_package = "dev.kratos.api.todolist.v1";
 option java_outer_classname = "TodoListProtoV1";
 
-// The greeting service definition.
+
 service Todolist {
 
-  // Register a user
-  rpc RegisterUser (RegisterUserRequest) returns (RegisterUserReply) {
-    option (google.api.http) = {
-      post: "/api/user/register",
-      body: "*",
-    };
-  }
-
-  // Login a user
-  rpc LoginUser (LoginUserRequest) returns (LoginUserReply) {
-    option (google.api.http) = {
-      post: "/api/user/login",
-      body: "*",
-    };
-  }
-
   // Add a todothings
-  rpc AddTodo (AddTodoRequest) returns (AddTodoReply) {
+  rpc Add (AddTodoRequest) returns (AddTodoReply) {
     option (google.api.http) = {
       post: "/api/todo",
       body: "*",
@@ -37,35 +21,34 @@ service Todolist {
   }
 
   // Show all todothings
-  rpc ShowAllTodo (ShowAllTodoRequest) returns (ShowAllTodoReply) {
+  rpc ShowAll (ShowAllTodoRequest) returns (ShowAllTodoReply) {
     option (google.api.http) = {
       get: "/api/todo/all",
     };
   }
 
   // Show KeyMatched todothings
-  rpc ShowKeyTodo (ShowKeyTodoRequest) returns (ShowKeyTodoReply) {
+  rpc ShowKey (ShowKeyTodoRequest) returns (ShowKeyTodoReply) {
     option (google.api.http) = {
       get: "/api/todo/key",
     };
   }
 
   // Delete a todothings
-  rpc DeleteTodo (DeleteTodoRequest) returns (DeleteTodoReply) {
+  rpc Delete (DeleteTodoRequest) returns (DeleteTodoReply) {
     option (google.api.http) = {
       delete: "/api/todo/{id}",
     };
   }
 
   // Modify a todothings
-  rpc ModifyTodo (ModifyTodoRequest) returns (ModifyTodoReply) {
+  rpc Modify (ModifyTodoRequest) returns (ModifyTodoReply) {
     option (google.api.http) = {
       put: "/api/todo/{id}",
       body: "*",
     };
   }
 }
-//Request Messages
 
 message ShowKeyTodoRequest{
   string keywords = 1;
@@ -94,47 +77,6 @@ message AddTodoRequest{
   string message = 2;
   string token = 3;
   string endtime = 4;
-}
-
-message LoginUserRequest{
-  string username = 1;
-  string password = 2;
-}
-
-message RegisterUserRequest{
-  string username = 1;
-  string password = 2;
-  string email = 3;
-  int64 phone = 4;
-}
-
-//Reply Messages
-
-message UnifiedReply{
-  int64 code = 1;
-  string msg = 2;
-}
-
-message User{
-  string username = 1;
-  string status = 2;
-  string email = 3;
-  string nickname = 4;
-  int64 created_at = 5;
-  int64 phone = 6;
-}
-
-message RegisterUserReply{
-  int64 code = 1;
-  string msg = 2;
-  User data = 3;
-}
-
-
-message LoginUserReply{
-  int64 code = 1;
-  string msg = 2;
-  User data = 3;
 }
 
 message AddTodoReply{

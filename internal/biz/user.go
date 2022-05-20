@@ -26,6 +26,7 @@ type User struct {
 type UserRepo interface {
 	GetUserByUsername(ctx context.Context, username string) (*User, error)
 	CreateUser(ctx context.Context, req *v1.RegisterUserRequest) error
+	CheckIsUserExist(ctx context.Context, username string) bool
 	// GetUserByEmail(ctx context.Context, email string) (*User, error)
 }
 
@@ -57,6 +58,13 @@ func (uc *UserUsecase) RegisterUser(ctx context.Context, u *v1.RegisterUserReque
 	if len(u.Username) == 0 || len(u.Password) == 0 || u.Phone == 0 || len(u.Email) == 0 {
 		return nil, errors.New(422, "Params", "Missing Params Data")
 	}
+
+	//检查用户名是否重复
+	if uc.ur.CheckIsUserExist(ctx, u.Username) {
+		return nil, errors.New(422, "Params", "User Existed")
+	}
+
+	//创建用户
 	err := uc.ur.CreateUser(ctx, u)
 	if err != nil {
 		return nil, err

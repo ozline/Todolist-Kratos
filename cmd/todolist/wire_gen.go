@@ -25,11 +25,14 @@ func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 	if err != nil {
 		return nil, nil, err
 	}
+	todolistRepo := data.NewTodolistRepo(dataData, logger)
+	todolistUsecase := biz.NewTodolistUsecase(todolistRepo, logger)
+	todolistService := service.NewTodolistService(todolistUsecase, logger)
+	httpServer := server.NewHTTPServer(confServer, todolistService, logger)
 	userRepo := data.NewUserRepo(dataData, logger)
 	userUsecase := biz.NewUserUsecase(userRepo, logger)
-	todolistService := service.NewTodolistService(userUsecase, logger)
-	httpServer := server.NewHTTPServer(confServer, todolistService, logger)
-	grpcServer := server.NewGRPCServer(confServer, todolistService, logger)
+	userService := service.NewUserService(userUsecase, logger)
+	grpcServer := server.NewGRPCServer(confServer, todolistService, userService, logger)
 	app := newApp(logger, httpServer, grpcServer)
 	return app, func() {
 		cleanup()

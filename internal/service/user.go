@@ -6,7 +6,7 @@ import (
 )
 
 //用户登录
-func (s *TodolistService) LoginUser(ctx context.Context, req *v1.LoginUserRequest) (reply *v1.LoginUserReply, err error) {
+func (s *UserService) LoginUser(ctx context.Context, req *v1.LoginUserRequest) (reply *v1.LoginUserReply, err error) {
 	data, err := s.uc.LoginUser(ctx, req)
 
 	if err != nil {
@@ -29,7 +29,7 @@ func (s *TodolistService) LoginUser(ctx context.Context, req *v1.LoginUserReques
 }
 
 //用户注册
-func (s *TodolistService) RegisterUser(ctx context.Context, req *v1.RegisterUserRequest) (reply *v1.RegisterUserReply, err error) {
+func (s *UserService) RegisterUser(ctx context.Context, req *v1.RegisterUserRequest) (reply *v1.RegisterUserReply, err error) {
 
 	data, err := s.uc.RegisterUser(ctx, req)
 

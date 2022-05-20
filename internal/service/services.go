@@ -9,17 +9,25 @@ import (
 )
 
 // ProviderSet is service providers.
-var ProviderSet = wire.NewSet(NewTodolistService)
+var ProviderSet = wire.NewSet(NewTodolistService, NewUserService)
 
 type TodolistService struct {
 	v1.UnimplementedTodolistServer
-
-	uc *biz.UserUsecase
-	// tc *biz.TodolistUsecase
+	tc *biz.TodolistUsecase
 
 	log *log.Helper
 }
 
-func NewTodolistService(uc *biz.UserUsecase, logger log.Logger) *TodolistService {
-	return &TodolistService{uc: uc, log: log.NewHelper(logger)}
+type UserService struct {
+	v1.UnimplementedUsersServer
+	uc  *biz.UserUsecase
+	log *log.Helper
+}
+
+func NewUserService(uc *biz.UserUsecase, logger log.Logger) *UserService {
+	return &UserService{uc: uc, log: log.NewHelper(logger)}
+}
+
+func NewTodolistService(tc *biz.TodolistUsecase, logger log.Logger) *TodolistService {
+	return &TodolistService{tc: tc, log: log.NewHelper(logger)}
 }

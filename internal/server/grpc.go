@@ -10,8 +10,7 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 )
 
-// NewGRPCServer new a gRPC server.
-func NewGRPCServer(c *conf.Server, greeter *service.TodolistService, logger log.Logger) *grpc.Server {
+func NewGRPCServer(c *conf.Server, todolist *service.TodolistService, users *service.UserService, logger log.Logger) *grpc.Server {
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),
@@ -27,6 +26,7 @@ func NewGRPCServer(c *conf.Server, greeter *service.TodolistService, logger log.
 		opts = append(opts, grpc.Timeout(c.Grpc.Timeout.AsDuration()))
 	}
 	srv := grpc.NewServer(opts...)
-	v1.RegisterTodolistServer(srv, greeter)
+	v1.RegisterTodolistServer(srv, todolist) //注册待办事项服务
+	v1.RegisterUsersServer(srv, users)       //注册用户服务
 	return srv
 }

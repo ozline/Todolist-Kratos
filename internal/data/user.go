@@ -6,7 +6,6 @@ import (
 	"todolist/internal/biz"
 
 	"github.com/go-kratos/kratos/v2/log"
-	"gorm.io/gorm"
 )
 
 type userRepo struct {
@@ -15,7 +14,6 @@ type userRepo struct {
 }
 
 type User struct {
-	gorm.Model
 	Username   string `gorm:"size:500"`
 	Password   string `gorm:"size:500"`
 	Status     int64  `gorm:"size:500"`
@@ -24,7 +22,7 @@ type User struct {
 	Phone      int64  `gorm:"size:500"`
 	Updated_at int64  `gorm:"size:500"`
 	Created_at int64  `gorm:"size:500"`
-	Deleted_at int64  `gorm:"size:500,default:''"`
+	// Deleted_at int64  `gorm:"size:500,default:''"`
 }
 
 // NewTodolistRepo .
@@ -33,6 +31,13 @@ func NewUserRepo(data *Data, logger log.Logger) biz.UserRepo {
 		data: data,
 		log:  log.NewHelper(logger),
 	}
+}
+
+func (r *userRepo) CheckIsUserExist(ctx context.Context, username string) bool {
+
+	var count int64
+	_ = r.data.db.Table("users").Where("username = ?", username).Count(&count)
+	return count != 0
 }
 
 func (r *userRepo) GetUserByUsername(ctx context.Context, username string) (user *biz.User, err error) {
@@ -60,7 +65,8 @@ func (r *userRepo) CreateUser(ctx context.Context, g *v1.RegisterUserRequest) er
 		Phone:      g.Phone,
 		Email:      g.Email,
 		Created_at: timeStamp,
-		Updated_at: timeStamp,
+		Updated_at: 0,
+		Nickname:   g.Username,
 	}
 
 	res := r.data.db.Table("users").Create(&u)

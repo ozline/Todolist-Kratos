@@ -3,8 +3,7 @@
 
 openapi: 3.0.3
 info:
-    title: Todolist API
-    description: The greeting service definition.
+    title: ""
     version: 0.0.1
 paths:
     /api/todo:
@@ -12,7 +11,7 @@ paths:
             tags:
                 - Todolist
             description: Add a todothings
-            operationId: Todolist_AddTodo
+            operationId: Todolist_Add
             requestBody:
                 content:
                     application/json:
@@ -37,7 +36,7 @@ paths:
             tags:
                 - Todolist
             description: Show all todothings
-            operationId: Todolist_ShowAllTodo
+            operationId: Todolist_ShowAll
             parameters:
                 - name: status
                   in: query
@@ -73,7 +72,7 @@ paths:
             tags:
                 - Todolist
             description: Show KeyMatched todothings
-            operationId: Todolist_ShowKeyTodo
+            operationId: Todolist_ShowKey
             parameters:
                 - name: keywords
                   in: query
@@ -109,7 +108,7 @@ paths:
             tags:
                 - Todolist
             description: Modify a todothings
-            operationId: Todolist_ModifyTodo
+            operationId: Todolist_Modify
             parameters:
                 - name: id
                   in: path
@@ -139,7 +138,7 @@ paths:
             tags:
                 - Todolist
             description: Delete a todothings
-            operationId: Todolist_DeleteTodo
+            operationId: Todolist_Delete
             parameters:
                 - name: id
                   in: path
@@ -162,9 +161,9 @@ paths:
     /api/user/login:
         post:
             tags:
-                - Todolist
+                - Users
             description: Login a user
-            operationId: Todolist_LoginUser
+            operationId: Users_Login
             requestBody:
                 content:
                     application/json:
@@ -187,9 +186,9 @@ paths:
     /api/user/register:
         post:
             tags:
-                - Todolist
+                - Users
             description: Register a user
-            operationId: Todolist_RegisterUser
+            operationId: Users_Register
             requestBody:
                 content:
                     application/json:
@@ -348,3 +347,5 @@ components:
                     format: int64
 tags:
     - name: Todolist
+    - name: Users
+      description: The greeting service definition.
