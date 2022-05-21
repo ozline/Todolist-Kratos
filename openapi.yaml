@@ -214,7 +214,8 @@ components:
             type: object
             properties:
                 code:
-                    type: string
+                    type: integer
+                    format: int64
                 msg:
                     type: string
         AddTodoRequest:
@@ -227,12 +228,14 @@ components:
                 token:
                     type: string
                 endtime:
-                    type: string
+                    type: integer
+                    format: int64
         DeleteTodoReply:
             type: object
             properties:
                 code:
-                    type: string
+                    type: integer
+                    format: int64
                 msg:
                     type: string
         GoogleProtobufAny:
@@ -331,6 +334,9 @@ components:
         User:
             type: object
             properties:
+                userid:
+                    type: integer
+                    format: int64
                 username:
                     type: string
                 status:

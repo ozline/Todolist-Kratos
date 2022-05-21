@@ -14,15 +14,15 @@ type userRepo struct {
 }
 
 type User struct {
-	Username   string `gorm:"size:500"`
-	Password   string `gorm:"size:500"`
-	Status     int64  `gorm:"size:500"`
-	Email      string `gorm:"size:500"`
-	Nickname   string `gorm:"size:500"`
-	Phone      int64  `gorm:"size:500"`
-	Updated_at int64  `gorm:"size:500"`
-	Created_at int64  `gorm:"size:500"`
-	// Deleted_at int64  `gorm:"size:500,default:''"`
+	ID         int64
+	Username   string
+	Password   string
+	Status     int64
+	Email      string
+	Nickname   string
+	Phone      int64
+	Updated_at int64
+	Created_at int64
 }
 
 // NewTodolistRepo .
@@ -53,6 +53,7 @@ func (r *userRepo) GetUserByUsername(ctx context.Context, username string) (user
 		Create_at: u.Created_at,
 		Email:     u.Email,
 		Password:  u.Password,
+		ID:        u.ID,
 	}, nil
 }
 

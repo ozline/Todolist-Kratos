@@ -13,16 +13,6 @@ var (
 	ErrUserNotFound = errors.NotFound(v1.ErrorReason_USER_NOT_FOUND.String(), "user not found")
 )
 
-type User struct {
-	Username  string
-	Email     string
-	Phone     int64
-	Create_at int64
-	Password  string
-	Nickname  string
-	Token     string
-}
-
 type UserRepo interface {
 	GetUserByUsername(ctx context.Context, username string) (*User, error)
 	CreateUser(ctx context.Context, req *v1.RegisterUserRequest) error
@@ -33,6 +23,19 @@ type UserRepo interface {
 type UserUsecase struct {
 	ur  UserRepo
 	log *log.Helper
+}
+
+type User struct {
+	ID        int64
+	Username  string
+	Email     string
+	Phone     int64
+	Create_at int64
+	Delete_at int64
+	Update_at int64
+	Password  string
+	Nickname  string
+	Token     string
 }
 
 func NewUserUsecase(repo UserRepo, logger log.Logger) *UserUsecase {
