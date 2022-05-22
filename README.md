@@ -315,8 +315,8 @@ eg：
 
 ## 尚未解决的问题
 
-- Todolist.Update方法中count的显示
-- 错误处理规范化
+- Todolist.Update方法中count的显示(2022.05.22 Fixed)
+- 错误处理规范化(准备使用Recovery解决)
 
 ## 结束
 
