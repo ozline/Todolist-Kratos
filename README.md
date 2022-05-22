@@ -38,17 +38,17 @@ server: # 服务器
     timeout: 1s
 data: # 数据
   database: # 数据库
-    username: ozline_a
-    password: Mima011216
-    address: db.ozline.icu
+    username:
+    password:
+    address:
     port: 3306
-    dbname: ozline_test
+    dbname:
   redis: # Redis 暂时未用到
     addr: 127.0.0.1:6379
     read_timeout: 0.2s
     write_timeout: 0.2s
 auth: # 鉴权
-  secret: MTAxNTkwMTg1Mw== # 秘钥
+  secret:  # 秘钥
 ```
 
 ## 数据库结构
