@@ -51,14 +51,8 @@ func JWTAuth(secret string) middleware.Middleware {
 	}
 }
 
-// func FromContext(ctx context.Context) *CurrentUser {
-// 	return ctx.Value(currentUserKey).(*CurrentUser)
-// }
-
 func JWTParse(token string, secret string) (*JWTClaims, error) { //解析JWT
 	tmp, err := jwt.ParseWithClaims(token, &JWTClaims{}, func(token *jwt.Token) (interface{}, error) {
-		// return []byte(conf.Auth.Secret), nil
-		// #BASE64,JWTToken
 		return []byte(secret), nil
 	})
 	if tmp != nil {
@@ -74,4 +68,18 @@ func JWTParse(token string, secret string) (*JWTClaims, error) { //解析JWT
 func JWTGenerate(claims JWTClaims, secret string) (string, error) { //生成JWT
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(secret))
+}
+
+func GetAuthToken(id string, username string, status int, secret string) (string, error) {
+	claims := JWTClaims{
+		Id:       id,
+		Username: username,
+		Status:   status,
+		StandardClaims: jwt.StandardClaims{
+			NotBefore: int64(time.Now().Unix() - 3600), //签名生效时间 一小时前
+			ExpiresAt: int64(time.Now().Unix() + 3600), //签名过期时间 一小时后
+		},
+	}
+	token, err := JWTGenerate(claims, secret)
+	return token, err
 }

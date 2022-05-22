@@ -41,8 +41,8 @@ service Todolist {
     };
   }
 
-  // Modify a todothings
-  rpc Modify (ModifyTodoRequest) returns (ModifyTodoReply) {
+  // Update a todothings
+  rpc Update (UpdateTodoRequest) returns (UpdateTodoReply) {
     option (google.api.http) = {
       put: "/api/todo/{id}",
       body: "*",
@@ -68,15 +68,24 @@ message DeleteTodoRequest{
   string id = 1;
 }
 
-message ModifyTodoRequest{
+message UpdateTodoRequest{
   string id = 1;
+  int64 status =2;
 }
 
 message AddTodoRequest{
   string title = 1;
   string message = 2;
-  string token = 3;
-  int64 endtime = 4;
+  string endtime = 3;
+}
+
+message Todo{
+  string title = 1;
+  string message = 2;
+  int64 status = 3;
+  int64 end_at = 4;
+  int64 create_at = 5;
+  int64 update_at = 6;
 }
 
 message AddTodoReply{
@@ -89,8 +98,8 @@ message DeleteTodoReply{
   string msg = 2;
 }
 
-message ModifyTodoReply{
-  string code = 1;
+message UpdateTodoReply{
+  int64 code = 1;
   string msg = 2;
 }
 

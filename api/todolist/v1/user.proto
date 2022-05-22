@@ -64,5 +64,6 @@ message RegisterUserReply{
 message LoginUserReply{
     int64 code = 1;
     string msg = 2;
-    User data = 3;
+    string token = 3;
+    User data = 4;
 }

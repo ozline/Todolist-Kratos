@@ -49,6 +49,7 @@ func (r *userRepo) GetUserByUsername(ctx context.Context, username string) (user
 
 	return &biz.User{
 		Username:  u.Username,
+		Status:    u.Status,
 		Phone:     u.Phone,
 		Create_at: u.Created_at,
 		Email:     u.Email,

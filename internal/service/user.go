@@ -2,8 +2,10 @@ package service
 
 import (
 	"context"
+	"strconv"
 	v1 "todolist/api/todolist/v1"
 	"todolist/internal/biz"
+	"todolist/internal/pkg/middleware/auth"
 
 	"github.com/go-kratos/kratos/v2/log"
 )
@@ -28,15 +30,15 @@ func (s *UserService) Login(ctx context.Context, req *v1.LoginUserRequest) (repl
 			Msg:  err.Error(),
 		}, err
 	} else {
+		token, _ := auth.GetAuthToken(strconv.FormatInt(data.ID, 10), data.Username, int(data.Status), "MTAxNTkwMTg1Mw==")
 		return &v1.LoginUserReply{
-			Code: 200,
-			Msg:  "ok",
+			Code:  200,
+			Msg:   "ok",
+			Token: token,
 			Data: &v1.User{
-				Userid:   data.ID,
-				Username: data.Username,
-				// Email:     data.Email,
+				Userid:    data.ID,
+				Username:  data.Username,
 				CreatedAt: data.Create_at,
-				// Phone:     data.Phone,
 			},
 		}, nil
 	}

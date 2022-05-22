@@ -17,7 +17,6 @@ type UserRepo interface {
 	GetUserByUsername(ctx context.Context, username string) (*User, error)
 	CreateUser(ctx context.Context, req *v1.RegisterUserRequest) error
 	CheckIsUserExist(ctx context.Context, username string) bool
-	// GetUserByEmail(ctx context.Context, email string) (*User, error)
 }
 
 type UserUsecase struct {
@@ -27,6 +26,7 @@ type UserUsecase struct {
 
 type User struct {
 	ID        int64
+	Status    int64
 	Username  string
 	Email     string
 	Phone     int64

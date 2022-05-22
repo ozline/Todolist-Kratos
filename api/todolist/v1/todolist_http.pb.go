@@ -20,9 +20,9 @@ const _ = http.SupportPackageIsVersion1
 type TodolistHTTPServer interface {
 	Add(context.Context, *AddTodoRequest) (*AddTodoReply, error)
 	Delete(context.Context, *DeleteTodoRequest) (*DeleteTodoReply, error)
-	Modify(context.Context, *ModifyTodoRequest) (*ModifyTodoReply, error)
 	ShowAll(context.Context, *ShowAllTodoRequest) (*ShowAllTodoReply, error)
 	ShowKey(context.Context, *ShowKeyTodoRequest) (*ShowKeyTodoReply, error)
+	Update(context.Context, *UpdateTodoRequest) (*UpdateTodoReply, error)
 }
 
 func RegisterTodolistHTTPServer(s *http.Server, srv TodolistHTTPServer) {
@@ -31,7 +31,7 @@ func RegisterTodolistHTTPServer(s *http.Server, srv TodolistHTTPServer) {
 	r.GET("/api/todo/all", _Todolist_ShowAll0_HTTP_Handler(srv))
 	r.GET("/api/todo/key", _Todolist_ShowKey0_HTTP_Handler(srv))
 	r.DELETE("/api/todo/{id}", _Todolist_Delete0_HTTP_Handler(srv))
-	r.PUT("/api/todo/{id}", _Todolist_Modify0_HTTP_Handler(srv))
+	r.PUT("/api/todo/{id}", _Todolist_Update0_HTTP_Handler(srv))
 }
 
 func _Todolist_Add0_HTTP_Handler(srv TodolistHTTPServer) func(ctx http.Context) error {
@@ -113,24 +113,24 @@ func _Todolist_Delete0_HTTP_Handler(srv TodolistHTTPServer) func(ctx http.Contex
 	}
 }
 
-func _Todolist_Modify0_HTTP_Handler(srv TodolistHTTPServer) func(ctx http.Context) error {
+func _Todolist_Update0_HTTP_Handler(srv TodolistHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in ModifyTodoRequest
+		var in UpdateTodoRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindVars(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, "/todolist.v1.Todolist/Modify")
+		http.SetOperation(ctx, "/todolist.v1.Todolist/Update")
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Modify(ctx, req.(*ModifyTodoRequest))
+			return srv.Update(ctx, req.(*UpdateTodoRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*ModifyTodoReply)
+		reply := out.(*UpdateTodoReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -138,9 +138,9 @@ func _Todolist_Modify0_HTTP_Handler(srv TodolistHTTPServer) func(ctx http.Contex
 type TodolistHTTPClient interface {
 	Add(ctx context.Context, req *AddTodoRequest, opts ...http.CallOption) (rsp *AddTodoReply, err error)
 	Delete(ctx context.Context, req *DeleteTodoRequest, opts ...http.CallOption) (rsp *DeleteTodoReply, err error)
-	Modify(ctx context.Context, req *ModifyTodoRequest, opts ...http.CallOption) (rsp *ModifyTodoReply, err error)
 	ShowAll(ctx context.Context, req *ShowAllTodoRequest, opts ...http.CallOption) (rsp *ShowAllTodoReply, err error)
 	ShowKey(ctx context.Context, req *ShowKeyTodoRequest, opts ...http.CallOption) (rsp *ShowKeyTodoReply, err error)
+	Update(ctx context.Context, req *UpdateTodoRequest, opts ...http.CallOption) (rsp *UpdateTodoReply, err error)
 }
 
 type TodolistHTTPClientImpl struct {
@@ -177,19 +177,6 @@ func (c *TodolistHTTPClientImpl) Delete(ctx context.Context, in *DeleteTodoReque
 	return &out, err
 }
 
-func (c *TodolistHTTPClientImpl) Modify(ctx context.Context, in *ModifyTodoRequest, opts ...http.CallOption) (*ModifyTodoReply, error) {
-	var out ModifyTodoReply
-	pattern := "/api/todo/{id}"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation("/todolist.v1.Todolist/Modify"))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, err
-}
-
 func (c *TodolistHTTPClientImpl) ShowAll(ctx context.Context, in *ShowAllTodoRequest, opts ...http.CallOption) (*ShowAllTodoReply, error) {
 	var out ShowAllTodoReply
 	pattern := "/api/todo/all"
@@ -210,6 +197,19 @@ func (c *TodolistHTTPClientImpl) ShowKey(ctx context.Context, in *ShowKeyTodoReq
 	opts = append(opts, http.Operation("/todolist.v1.Todolist/ShowKey"))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
+}
+
+func (c *TodolistHTTPClientImpl) Update(ctx context.Context, in *UpdateTodoRequest, opts ...http.CallOption) (*UpdateTodoReply, error) {
+	var out UpdateTodoReply
+	pattern := "/api/todo/{id}"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation("/todolist.v1.Todolist/Update"))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "PUT", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

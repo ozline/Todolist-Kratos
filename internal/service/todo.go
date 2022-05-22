@@ -5,7 +5,6 @@ import (
 	v1 "todolist/api/todolist/v1"
 	"todolist/internal/biz"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/go-kratos/kratos/v2/log"
 )
 
@@ -24,8 +23,6 @@ func NewTodolistService(tc *biz.TodolistUsecase, logger log.Logger) *TodolistSer
 func (s *TodolistService) Add(ctx context.Context, req *v1.AddTodoRequest) (reply *v1.AddTodoReply, err error) {
 
 	err = s.tc.AddTodo(ctx, req)
-	username := ctx.Value("username")
-	spew.Dump(username)
 	if err != nil {
 		return &v1.AddTodoReply{
 			Code: 400,
@@ -33,7 +30,41 @@ func (s *TodolistService) Add(ctx context.Context, req *v1.AddTodoRequest) (repl
 		}, err
 	}
 	return &v1.AddTodoReply{
-		Msg: username.(string),
+		Code: 200,
+		Msg:  "ok",
+	}, nil
+}
+
+//编辑待办事项
+func (s *TodolistService) Update(ctx context.Context, req *v1.UpdateTodoRequest) (reply *v1.UpdateTodoReply, err error) {
+
+	err = s.tc.UpdateTodo(ctx, req)
+
+	if err != nil {
+		return &v1.UpdateTodoReply{
+			Code: 400,
+			Msg:  err.Error(),
+		}, nil
+	}
+	return &v1.UpdateTodoReply{
+		Code: 200,
+		Msg:  "ok",
+	}, nil
+}
+
+//删除待办事项
+func (s *TodolistService) Delete(ctx context.Context, req *v1.DeleteTodoRequest) (reply *v1.DeleteTodoReply, err error) {
+	err = s.tc.DeleteTodo(ctx, req)
+
+	if err != nil {
+		return &v1.DeleteTodoReply{
+			Code: 400,
+			Msg:  err.Error(),
+		}, nil
+	}
+	return &v1.DeleteTodoReply{
+		Code: 200,
+		Msg:  "ok",
 	}, nil
 }
 
@@ -45,14 +76,4 @@ func (s *TodolistService) ShowAll(ctx context.Context, req *v1.ShowAllTodoReques
 //根据关键词查找待办事项
 func (s *TodolistService) ShowKey(ctx context.Context, req *v1.ShowKeyTodoRequest) (reply *v1.ShowKeyTodoReply, err error) {
 	return &v1.ShowKeyTodoReply{}, nil
-}
-
-//删除待办事项
-func (s *TodolistService) Delete(ctx context.Context, req *v1.DeleteTodoRequest) (reply *v1.DeleteTodoReply, err error) {
-	return &v1.DeleteTodoReply{}, nil
-}
-
-//编辑待办事项
-func (s *TodolistService) Modify(ctx context.Context, req *v1.ModifyTodoRequest) (reply *v1.ModifyTodoReply, err error) {
-	return &v1.ModifyTodoReply{}, nil
 }
