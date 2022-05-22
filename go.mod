@@ -3,6 +3,7 @@ module todolist
 go 1.17
 
 require (
+	github.com/davecgh/go-spew v1.1.1
 	github.com/go-kratos/kratos/v2 v2.2.2
 	github.com/golang-jwt/jwt/v4 v4.4.1
 	github.com/google/wire v0.5.0
@@ -14,7 +15,6 @@ require (
 )
 
 require (
-	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/go-logr/logr v1.2.1 // indirect
 	github.com/go-logr/stdr v1.2.0 // indirect

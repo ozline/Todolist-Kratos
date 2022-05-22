@@ -6,6 +6,7 @@ import (
 	"todolist/internal/biz"
 
 	"github.com/go-kratos/kratos/v2/log"
+	"gorm.io/gorm"
 )
 
 type userRepo struct {
@@ -14,6 +15,7 @@ type userRepo struct {
 }
 
 type User struct {
+	gorm.Model
 	ID         int64
 	Username   string
 	Password   string

@@ -70,9 +70,9 @@ func (r *todolistRepo) UpdateTodo(ctx context.Context, g *v1.UpdateTodoRequest) 
 		res = res.Where("userid = ? AND id = ?", getUserid(ctx), g.Id).Update("status", g.Status)
 	}
 
-	res = res.Update("update_at", biz.GetTimestamp13())
+	// res = res.Update("update_at", biz.GetTimestamp13())
 	spew.Dump(res.RowsAffected)
-	return res.RowsAffected, res.Error
+	return res.RowsAffected, res.Error // 0
 }
 
 func (r *todolistRepo) DeleteTodo(ctx context.Context, g *v1.DeleteTodoRequest) (total int64, err error) {
@@ -104,11 +104,15 @@ func (r *todolistRepo) GetTodolistByStatus(ctx context.Context, g *v1.ShowAllTod
 	var res *gorm.DB
 	var count int64
 	// status <0 = 获取全部
+	res = r.data.db.Table("todolist")
+
 	if g.Status < 0 {
-		res = r.data.db.Table("todolist").Where("userid = ?", getUserid(ctx)).Offset(int((g.Page - 1) * g.Pagesize)).Limit(int(g.Pagesize)).Find(&todos).Count(&count)
+		res = res.Where("userid = ?", getUserid(ctx)).Offset(int((g.Page - 1) * g.Pagesize)).Limit(int(g.Pagesize)).Find(&todos).Count(&count)
 	} else {
-		res = r.data.db.Table("todolist").Where("userid = ? AND status = ?", getUserid(ctx), g.Status).Offset(int((g.Page - 1) * g.Pagesize)).Limit(int(g.Pagesize)).Find(&todos).Count(&count)
+		res = res.Where("userid = ? AND status = ?", getUserid(ctx), g.Status)
 	}
+
+	res = res.Offset(int((g.Page - 1) * g.Pagesize)).Limit(int(g.Pagesize)).Find(&todos).Count(&count)
 
 	if res.Error != nil {
 		return nil, 0, res.Error
