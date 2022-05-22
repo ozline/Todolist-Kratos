@@ -21,14 +21,14 @@ service Todolist {
   }
 
   // Show all todothings
-  rpc ShowAll (ShowAllTodoRequest) returns (ShowAllTodoReply) {
+  rpc ShowAll (ShowAllTodoRequest) returns (TodoListReply) {
     option (google.api.http) = {
       get: "/api/todo/all",
     };
   }
 
   // Show KeyMatched todothings
-  rpc ShowKey (ShowKeyTodoRequest) returns (ShowKeyTodoReply) {
+  rpc ShowKey (ShowKeyTodoRequest) returns (TodoListReply) {
     option (google.api.http) = {
       get: "/api/todo/key",
     };
@@ -51,25 +51,23 @@ service Todolist {
 }
 
 message ShowKeyTodoRequest{
-  string keywords = 1;
-  string page = 2;
-  string num = 3;
-  string token = 4;
+  string key = 1;
+  int64 page = 2;
+  int64 pagesize = 3;
 }
 
 message ShowAllTodoRequest{
-  string status = 1;
-  string page = 2;
-  string num = 3;
-  string token = 4;
+  int64 status = 1;
+  int64 page = 2;
+  int64 pagesize = 3;
 }
 
 message DeleteTodoRequest{
-  string id = 1;
+  int64 id = 1;
 }
 
 message UpdateTodoRequest{
-  string id = 1;
+  int64 id = 1;
   int64 status =2;
 }
 
@@ -96,21 +94,22 @@ message AddTodoReply{
 message DeleteTodoReply{
   int64 code = 1;
   string msg = 2;
+  int64 count = 3;
 }
 
 message UpdateTodoReply{
   int64 code = 1;
   string msg = 2;
+  int64 count = 3;
 }
 
-message ShowAllTodoReply{
-  string code = 1;
-  string msg = 2;
-  string data = 3;
+message MultipleTodoReply{
+  repeated Todo list = 1;
+  int64 total = 2;
 }
 
-message ShowKeyTodoReply{
-  string code = 1;
+message TodoListReply{
+  int64 code = 1;
   string msg = 2;
-  string data = 3;
+  MultipleTodoReply data = 3;
 }

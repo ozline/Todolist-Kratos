@@ -41,26 +41,25 @@ paths:
                 - name: status
                   in: query
                   schema:
-                    type: string
+                    type: integer
+                    format: int64
                 - name: page
                   in: query
                   schema:
-                    type: string
-                - name: num
+                    type: integer
+                    format: int64
+                - name: pagesize
                   in: query
                   schema:
-                    type: string
-                - name: token
-                  in: query
-                  schema:
-                    type: string
+                    type: integer
+                    format: int64
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/ShowAllTodoReply'
+                                $ref: '#/components/schemas/TodoListReply'
                 default:
                     description: Default error response
                     content:
@@ -74,29 +73,27 @@ paths:
             description: Show KeyMatched todothings
             operationId: Todolist_ShowKey
             parameters:
-                - name: keywords
+                - name: key
                   in: query
                   schema:
                     type: string
                 - name: page
                   in: query
                   schema:
-                    type: string
-                - name: num
+                    type: integer
+                    format: int64
+                - name: pagesize
                   in: query
                   schema:
-                    type: string
-                - name: token
-                  in: query
-                  schema:
-                    type: string
+                    type: integer
+                    format: int64
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/ShowKeyTodoReply'
+                                $ref: '#/components/schemas/TodoListReply'
                 default:
                     description: Default error response
                     content:
@@ -114,7 +111,8 @@ paths:
                   in: path
                   required: true
                   schema:
-                    type: string
+                    type: integer
+                    format: int64
             requestBody:
                 content:
                     application/json:
@@ -144,7 +142,8 @@ paths:
                   in: path
                   required: true
                   schema:
-                    type: string
+                    type: integer
+                    format: int64
             responses:
                 "200":
                     description: OK
@@ -235,6 +234,9 @@ components:
                     format: int64
                 msg:
                     type: string
+                count:
+                    type: integer
+                    format: int64
         GoogleProtobufAny:
             type: object
             properties:
@@ -262,6 +264,16 @@ components:
                     type: string
                 password:
                     type: string
+        MultipleTodoReply:
+            type: object
+            properties:
+                list:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Todo'
+                total:
+                    type: integer
+                    format: int64
         RegisterUserReply:
             type: object
             properties:
@@ -284,24 +296,6 @@ components:
                 phone:
                     type: integer
                     format: int64
-        ShowAllTodoReply:
-            type: object
-            properties:
-                code:
-                    type: string
-                msg:
-                    type: string
-                data:
-                    type: string
-        ShowKeyTodoReply:
-            type: object
-            properties:
-                code:
-                    type: string
-                msg:
-                    type: string
-                data:
-                    type: string
         Status:
             type: object
             properties:
@@ -318,6 +312,35 @@ components:
                         $ref: '#/components/schemas/GoogleProtobufAny'
                     description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
             description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
+        Todo:
+            type: object
+            properties:
+                title:
+                    type: string
+                message:
+                    type: string
+                status:
+                    type: integer
+                    format: int64
+                endAt:
+                    type: integer
+                    format: int64
+                createAt:
+                    type: integer
+                    format: int64
+                updateAt:
+                    type: integer
+                    format: int64
+        TodoListReply:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int64
+                msg:
+                    type: string
+                data:
+                    $ref: '#/components/schemas/MultipleTodoReply'
         UpdateTodoReply:
             type: object
             properties:
@@ -326,11 +349,15 @@ components:
                     format: int64
                 msg:
                     type: string
+                count:
+                    type: integer
+                    format: int64
         UpdateTodoRequest:
             type: object
             properties:
                 id:
-                    type: string
+                    type: integer
+                    format: int64
                 status:
                     type: integer
                     format: int64

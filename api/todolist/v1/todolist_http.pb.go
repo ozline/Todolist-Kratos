@@ -20,8 +20,8 @@ const _ = http.SupportPackageIsVersion1
 type TodolistHTTPServer interface {
 	Add(context.Context, *AddTodoRequest) (*AddTodoReply, error)
 	Delete(context.Context, *DeleteTodoRequest) (*DeleteTodoReply, error)
-	ShowAll(context.Context, *ShowAllTodoRequest) (*ShowAllTodoReply, error)
-	ShowKey(context.Context, *ShowKeyTodoRequest) (*ShowKeyTodoReply, error)
+	ShowAll(context.Context, *ShowAllTodoRequest) (*TodoListReply, error)
+	ShowKey(context.Context, *ShowKeyTodoRequest) (*TodoListReply, error)
 	Update(context.Context, *UpdateTodoRequest) (*UpdateTodoReply, error)
 }
 
@@ -67,7 +67,7 @@ func _Todolist_ShowAll0_HTTP_Handler(srv TodolistHTTPServer) func(ctx http.Conte
 		if err != nil {
 			return err
 		}
-		reply := out.(*ShowAllTodoReply)
+		reply := out.(*TodoListReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -86,7 +86,7 @@ func _Todolist_ShowKey0_HTTP_Handler(srv TodolistHTTPServer) func(ctx http.Conte
 		if err != nil {
 			return err
 		}
-		reply := out.(*ShowKeyTodoReply)
+		reply := out.(*TodoListReply)
 		return ctx.Result(200, reply)
 	}
 }
@@ -138,8 +138,8 @@ func _Todolist_Update0_HTTP_Handler(srv TodolistHTTPServer) func(ctx http.Contex
 type TodolistHTTPClient interface {
 	Add(ctx context.Context, req *AddTodoRequest, opts ...http.CallOption) (rsp *AddTodoReply, err error)
 	Delete(ctx context.Context, req *DeleteTodoRequest, opts ...http.CallOption) (rsp *DeleteTodoReply, err error)
-	ShowAll(ctx context.Context, req *ShowAllTodoRequest, opts ...http.CallOption) (rsp *ShowAllTodoReply, err error)
-	ShowKey(ctx context.Context, req *ShowKeyTodoRequest, opts ...http.CallOption) (rsp *ShowKeyTodoReply, err error)
+	ShowAll(ctx context.Context, req *ShowAllTodoRequest, opts ...http.CallOption) (rsp *TodoListReply, err error)
+	ShowKey(ctx context.Context, req *ShowKeyTodoRequest, opts ...http.CallOption) (rsp *TodoListReply, err error)
 	Update(ctx context.Context, req *UpdateTodoRequest, opts ...http.CallOption) (rsp *UpdateTodoReply, err error)
 }
 
@@ -177,8 +177,8 @@ func (c *TodolistHTTPClientImpl) Delete(ctx context.Context, in *DeleteTodoReque
 	return &out, err
 }
 
-func (c *TodolistHTTPClientImpl) ShowAll(ctx context.Context, in *ShowAllTodoRequest, opts ...http.CallOption) (*ShowAllTodoReply, error) {
-	var out ShowAllTodoReply
+func (c *TodolistHTTPClientImpl) ShowAll(ctx context.Context, in *ShowAllTodoRequest, opts ...http.CallOption) (*TodoListReply, error) {
+	var out TodoListReply
 	pattern := "/api/todo/all"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/todolist.v1.Todolist/ShowAll"))
@@ -190,8 +190,8 @@ func (c *TodolistHTTPClientImpl) ShowAll(ctx context.Context, in *ShowAllTodoReq
 	return &out, err
 }
 
-func (c *TodolistHTTPClientImpl) ShowKey(ctx context.Context, in *ShowKeyTodoRequest, opts ...http.CallOption) (*ShowKeyTodoReply, error) {
-	var out ShowKeyTodoReply
+func (c *TodolistHTTPClientImpl) ShowKey(ctx context.Context, in *ShowKeyTodoRequest, opts ...http.CallOption) (*TodoListReply, error) {
+	var out TodoListReply
 	pattern := "/api/todo/key"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation("/todolist.v1.Todolist/ShowKey"))

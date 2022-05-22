@@ -6,7 +6,9 @@ import (
 	v1 "todolist/api/todolist/v1"
 	"todolist/internal/biz"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/go-kratos/kratos/v2/log"
+	"gorm.io/gorm"
 )
 
 type todolistRepo struct {
@@ -54,14 +56,92 @@ func (r *todolistRepo) AddTodo(ctx context.Context, g *v1.AddTodoRequest) error 
 	return res.Error
 }
 
-func (r *todolistRepo) UpdateTodo(ctx context.Context, g *v1.UpdateTodoRequest) error {
+func (r *todolistRepo) UpdateTodo(ctx context.Context, g *v1.UpdateTodoRequest) (total int64, err error) {
 
-	res := r.data.db.Table("todolist").Where("userid = ? AND id = ?", getUserid(ctx), g.Id).Update("status", g.Status)
-	return res.Error
+	var res *gorm.DB
+
+	// id == -1 = 全部已完成设为待办
+	// id == -2 = 全部待办设为已完成
+
+	if g.Id < 0 {
+		res = r.data.db.Table("todolist").Where("userid = ? AND status = ?", getUserid(ctx), g.Id+2).Update("status", (3+g.Id)%2).Update("update_at", biz.GetTimestamp13())
+	} else {
+		res = r.data.db.Table("todolist").Where("userid = ? AND id = ?", getUserid(ctx), g.Id).Update("status", g.Status).Update("update_at", biz.GetTimestamp13())
+	}
+
+	spew.Dump(res.RowsAffected)
+	return res.RowsAffected, res.Error
 }
 
-func (r *todolistRepo) DeleteTodo(ctx context.Context, g *v1.DeleteTodoRequest) error {
+func (r *todolistRepo) DeleteTodo(ctx context.Context, g *v1.DeleteTodoRequest) (total int64, err error) {
 	u := new(Todo)
-	res := r.data.db.Table("todolist").Where("userid = ? AND id = ?", getUserid(ctx), g.Id).Unscoped().Delete(&u)
-	return res.Error
+	var res *gorm.DB
+
+	// id == -3 = 全部
+	// id == -2 = 未完成
+	// id == -1 = 已完成
+	if g.Id < 0 {
+		if g.Id == -3 {
+			res = r.data.db.Table("todolist").Where("userid = ?", getUserid(ctx)).Unscoped().Delete(&u)
+		} else {
+			res = r.data.db.Table("todolist").Where("userid = ? AND status = ?", getUserid(ctx), g.Id+2).Unscoped().Delete(&u)
+		}
+	} else {
+		res = r.data.db.Table("todolist").Where("userid = ? AND id = ?", getUserid(ctx), g.Id).Unscoped().Delete(&u)
+	}
+	return res.RowsAffected, res.Error
+}
+
+func (r *todolistRepo) GetTodolistByStatus(ctx context.Context, g *v1.ShowAllTodoRequest) (list []*biz.Todo, total int64, err error) {
+	var todos []Todo
+	var res *gorm.DB
+	var count int64
+	// status <0 = 获取全部
+	if g.Status < 0 {
+		res = r.data.db.Table("todolist").Where("userid = ?", getUserid(ctx)).Offset(int((g.Page - 1) * g.Pagesize)).Limit(int(g.Pagesize)).Find(&todos).Count(&count)
+	} else {
+		res = r.data.db.Table("todolist").Where("userid = ? AND status = ?", getUserid(ctx), g.Status).Offset(int((g.Page - 1) * g.Pagesize)).Limit(int(g.Pagesize)).Find(&todos).Count(&count)
+	}
+
+	if res.Error != nil {
+		return nil, 0, res.Error
+	}
+
+	list = make([]*biz.Todo, 0)
+
+	for _, x := range todos {
+		list = append(list, &biz.Todo{
+			Title:     x.Title,
+			Message:   x.Message,
+			Status:    x.Status,
+			End_at:    x.End_at,
+			Create_at: x.CreateAt,
+			Update_at: x.UpdateAt,
+		})
+	}
+	return list, count, nil
+}
+
+func (r *todolistRepo) GetTodolistByKey(ctx context.Context, g *v1.ShowKeyTodoRequest) (list []*biz.Todo, total int64, err error) {
+	var todos []Todo
+	var count int64
+	res := r.data.db.Table("todolist").Where("userid = ? AND message LIKE ?", getUserid(ctx), "%"+g.Key+"%").Offset(int((g.Page - 1) * g.Pagesize)).Limit(int(g.Pagesize)).Find(&todos).Count(&count)
+
+	if res.Error != nil {
+		return nil, 0, res.Error
+	}
+
+	list = make([]*biz.Todo, 0)
+
+	for _, x := range todos {
+		list = append(list, &biz.Todo{
+			Title:     x.Title,
+			Message:   x.Message,
+			Status:    x.Status,
+			End_at:    x.End_at,
+			Create_at: x.CreateAt,
+			Update_at: x.UpdateAt,
+		})
+	}
+	return list, count, nil
 }

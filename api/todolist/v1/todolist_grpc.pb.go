@@ -25,9 +25,9 @@ type TodolistClient interface {
 	// Add a todothings
 	Add(ctx context.Context, in *AddTodoRequest, opts ...grpc.CallOption) (*AddTodoReply, error)
 	// Show all todothings
-	ShowAll(ctx context.Context, in *ShowAllTodoRequest, opts ...grpc.CallOption) (*ShowAllTodoReply, error)
+	ShowAll(ctx context.Context, in *ShowAllTodoRequest, opts ...grpc.CallOption) (*TodoListReply, error)
 	// Show KeyMatched todothings
-	ShowKey(ctx context.Context, in *ShowKeyTodoRequest, opts ...grpc.CallOption) (*ShowKeyTodoReply, error)
+	ShowKey(ctx context.Context, in *ShowKeyTodoRequest, opts ...grpc.CallOption) (*TodoListReply, error)
 	// Delete a todothings
 	Delete(ctx context.Context, in *DeleteTodoRequest, opts ...grpc.CallOption) (*DeleteTodoReply, error)
 	// Update a todothings
@@ -51,8 +51,8 @@ func (c *todolistClient) Add(ctx context.Context, in *AddTodoRequest, opts ...gr
 	return out, nil
 }
 
-func (c *todolistClient) ShowAll(ctx context.Context, in *ShowAllTodoRequest, opts ...grpc.CallOption) (*ShowAllTodoReply, error) {
-	out := new(ShowAllTodoReply)
+func (c *todolistClient) ShowAll(ctx context.Context, in *ShowAllTodoRequest, opts ...grpc.CallOption) (*TodoListReply, error) {
+	out := new(TodoListReply)
 	err := c.cc.Invoke(ctx, "/todolist.v1.Todolist/ShowAll", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -60,8 +60,8 @@ func (c *todolistClient) ShowAll(ctx context.Context, in *ShowAllTodoRequest, op
 	return out, nil
 }
 
-func (c *todolistClient) ShowKey(ctx context.Context, in *ShowKeyTodoRequest, opts ...grpc.CallOption) (*ShowKeyTodoReply, error) {
-	out := new(ShowKeyTodoReply)
+func (c *todolistClient) ShowKey(ctx context.Context, in *ShowKeyTodoRequest, opts ...grpc.CallOption) (*TodoListReply, error) {
+	out := new(TodoListReply)
 	err := c.cc.Invoke(ctx, "/todolist.v1.Todolist/ShowKey", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -94,9 +94,9 @@ type TodolistServer interface {
 	// Add a todothings
 	Add(context.Context, *AddTodoRequest) (*AddTodoReply, error)
 	// Show all todothings
-	ShowAll(context.Context, *ShowAllTodoRequest) (*ShowAllTodoReply, error)
+	ShowAll(context.Context, *ShowAllTodoRequest) (*TodoListReply, error)
 	// Show KeyMatched todothings
-	ShowKey(context.Context, *ShowKeyTodoRequest) (*ShowKeyTodoReply, error)
+	ShowKey(context.Context, *ShowKeyTodoRequest) (*TodoListReply, error)
 	// Delete a todothings
 	Delete(context.Context, *DeleteTodoRequest) (*DeleteTodoReply, error)
 	// Update a todothings
@@ -111,10 +111,10 @@ type UnimplementedTodolistServer struct {
 func (UnimplementedTodolistServer) Add(context.Context, *AddTodoRequest) (*AddTodoReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Add not implemented")
 }
-func (UnimplementedTodolistServer) ShowAll(context.Context, *ShowAllTodoRequest) (*ShowAllTodoReply, error) {
+func (UnimplementedTodolistServer) ShowAll(context.Context, *ShowAllTodoRequest) (*TodoListReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ShowAll not implemented")
 }
-func (UnimplementedTodolistServer) ShowKey(context.Context, *ShowKeyTodoRequest) (*ShowKeyTodoReply, error) {
+func (UnimplementedTodolistServer) ShowKey(context.Context, *ShowKeyTodoRequest) (*TodoListReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ShowKey not implemented")
 }
 func (UnimplementedTodolistServer) Delete(context.Context, *DeleteTodoRequest) (*DeleteTodoReply, error) {
