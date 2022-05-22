@@ -6,15 +6,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/go-kratos/kratos/v2/metadata"
 	"github.com/go-kratos/kratos/v2/middleware"
 	"github.com/go-kratos/kratos/v2/transport"
 	"github.com/golang-jwt/jwt/v4"
-)
-
-var (
-	secret string = "MTAxNTkwMTg1Mw=="
 )
 
 type JWTClaims struct {
@@ -27,12 +22,10 @@ type JWTClaims struct {
 func JWTAuth(secret string) middleware.Middleware {
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (reply interface{}, err error) {
-			spew.Dump(secret)
 			//获取JWTTOKEN
 			var JWTToken string
 			if md, ok := metadata.FromServerContext(ctx); ok {
 				JWTToken = md.Get("x-md-global-token")
-				spew.Dump(JWTToken)
 			} else if tr, ok := transport.FromServerContext(ctx); ok {
 				JWTToken = strings.SplitN(tr.RequestHeader().Get("Authorization"), " ", 2)[1]
 			} else {
@@ -53,7 +46,6 @@ func JWTAuth(secret string) middleware.Middleware {
 			ctx = context.WithValue(ctx, "id", claims.Id)
 			ctx = context.WithValue(ctx, "status", claims.Status)
 
-			spew.Dump(claims)
 			return handler(ctx, req)
 		}
 	}

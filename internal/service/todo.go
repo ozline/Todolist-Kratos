@@ -5,6 +5,7 @@ import (
 	v1 "todolist/api/todolist/v1"
 	"todolist/internal/biz"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/go-kratos/kratos/v2/log"
 )
 
@@ -23,13 +24,17 @@ func NewTodolistService(tc *biz.TodolistUsecase, logger log.Logger) *TodolistSer
 func (s *TodolistService) Add(ctx context.Context, req *v1.AddTodoRequest) (reply *v1.AddTodoReply, err error) {
 
 	err = s.tc.AddTodo(ctx, req)
+	username := ctx.Value("username")
+	spew.Dump(username)
 	if err != nil {
 		return &v1.AddTodoReply{
 			Code: 400,
 			Msg:  err.Error(),
 		}, err
 	}
-	return &v1.AddTodoReply{}, nil
+	return &v1.AddTodoReply{
+		Msg: username.(string),
+	}, nil
 }
 
 //显示全部待办事项
