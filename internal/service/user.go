@@ -56,7 +56,7 @@ func (s *UserService) Register(ctx context.Context, req *v1.RegisterUserRequest)
 		}, nil
 	} else {
 		return &v1.RegisterUserReply{
-			Code: 400,
+			Code: 200,
 			Msg:  "ok",
 			Data: &v1.User{
 				Userid:    data.ID,

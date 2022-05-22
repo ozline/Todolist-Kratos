@@ -63,12 +63,14 @@ func (r *todolistRepo) UpdateTodo(ctx context.Context, g *v1.UpdateTodoRequest) 
 	// id == -1 = 全部已完成设为待办
 	// id == -2 = 全部待办设为已完成
 
+	res = r.data.db.Table("todolist")
 	if g.Id < 0 {
-		res = r.data.db.Table("todolist").Where("userid = ? AND status = ?", getUserid(ctx), g.Id+2).Update("status", (3+g.Id)%2).Update("update_at", biz.GetTimestamp13())
+		res = res.Where("userid = ? AND status = ?", getUserid(ctx), g.Id+2).Update("status", (3+g.Id)%2)
 	} else {
-		res = r.data.db.Table("todolist").Where("userid = ? AND id = ?", getUserid(ctx), g.Id).Update("status", g.Status).Update("update_at", biz.GetTimestamp13())
+		res = res.Where("userid = ? AND id = ?", getUserid(ctx), g.Id).Update("status", g.Status)
 	}
 
+	res = res.Update("update_at", biz.GetTimestamp13())
 	spew.Dump(res.RowsAffected)
 	return res.RowsAffected, res.Error
 }
@@ -80,15 +82,20 @@ func (r *todolistRepo) DeleteTodo(ctx context.Context, g *v1.DeleteTodoRequest) 
 	// id == -3 = 全部
 	// id == -2 = 未完成
 	// id == -1 = 已完成
+	res = r.data.db.Table("todolist")
+
 	if g.Id < 0 {
 		if g.Id == -3 {
-			res = r.data.db.Table("todolist").Where("userid = ?", getUserid(ctx)).Unscoped().Delete(&u)
+			res = res.Where("userid = ?", getUserid(ctx))
 		} else {
-			res = r.data.db.Table("todolist").Where("userid = ? AND status = ?", getUserid(ctx), g.Id+2).Unscoped().Delete(&u)
+			res = res.Where("userid = ? AND status = ?", getUserid(ctx), g.Id+2)
 		}
 	} else {
-		res = r.data.db.Table("todolist").Where("userid = ? AND id = ?", getUserid(ctx), g.Id).Unscoped().Delete(&u)
+		res = res.Where("userid = ? AND id = ?", getUserid(ctx), g.Id)
 	}
+
+	res = res.Unscoped().Delete(&u)
+
 	return res.RowsAffected, res.Error
 }
 
